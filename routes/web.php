@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\userController;
+
+use App\Http\Controllers\authController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 require __DIR__.'/../routes/be.php';
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/welcome', function () {
+    return view('abc');
 });
-Route::get('register',[userController::class,'register'])->name('register');
-Route::post('do-register',[userController::class,'doRegister'])->name('doRegister');
+Route::get('register',[authController::class,'register'])->name('register');
+Route::post('do-register',[authController::class,'doRegister'])->name('doRegister');
 
-Route::get('login',[userController::class,'login'])->name('login');
-Route::post('do-login',[userController::class,'doLogin'])->name('doLogin');
+Route::get('login',[authController::class,'login'])->name('login');
+Route::post('do-login',[authController::class,'doLogin'])->name('doLogin');
+Route::post('logout',[authController::class,'logout'])->name('logout');

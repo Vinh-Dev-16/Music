@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UserRepository implements RepositoryInterface{
 
@@ -22,12 +24,12 @@ class UserRepository implements RepositoryInterface{
      */
     public function getOne($id)
     {
-        
+        return User::find($id);
     }
 
-    public function paginate()
+    public function paginate($num)
     {   
-        return User::paginate(6);
+        return User::paginate($num);
     }
 
     public function create(){
@@ -42,6 +44,7 @@ class UserRepository implements RepositoryInterface{
         ]);
         event(new Registered($user));
         Auth::login($user);
+        $user->assignRole('user');
     }
 
     public function edit($id)

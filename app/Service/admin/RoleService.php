@@ -26,9 +26,9 @@ class RoleService implements ServiceInterface{
         return $this->roleRepository->getOne($id);
     }
 
-    public function paginate()
+    public function paginate($num)
     {   
-        return $this->roleRepository->paginate();
+        return $this->roleRepository->paginate($num);
     }
 
     public function create(){
@@ -46,10 +46,10 @@ class RoleService implements ServiceInterface{
 
     public function update($id, $data)
     {
-        
+        $this->roleRepository->update($id, $data);
     }
     
     public function destroy($id){
-
+        $this->roleRepository->destroy($id);
     }   
 }

@@ -8,7 +8,7 @@ interface ServiceInterface{
 
     public function getOne($id);
 
-    public function paginate();
+    public function paginate($num);
 
     public function create();
 

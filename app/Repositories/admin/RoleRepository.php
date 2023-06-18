@@ -14,8 +14,8 @@ class RoleRepository implements RepositoryInterface{
         return Role::find($id);
     }
 
-    public function paginate(){
-
+    public function paginate($num){
+        return Role::paginate($num);
     }
 
     public function create(){
@@ -23,8 +23,10 @@ class RoleRepository implements RepositoryInterface{
     }
 
     public function store($data){
-        $role = Role::create(['name' => $data['name']]);
-        $role->givePermissionTo($data['permission']);
+        $role = Role::create(['name' => $data['role']]);
+        if(!(empty($data['permission']))){
+            $role->givePermissionTo($data['permission']);
+        }
     }
 
     public function edit($id){  
@@ -32,11 +34,17 @@ class RoleRepository implements RepositoryInterface{
     }
 
     public function update($id, $data){
-
+        $role = Role::findOrFail($id);
+        $role->name = $data['role'];
+        $role->save();
+        $role->syncPermissions($data['permission']);
     }
 
     public function destroy($id){
-
+        $role = Role::find($id);
+        $permission = $role->permissions;
+        $role->revokePermissionTo($permission);
+        $role->delete();
     }
 
 }

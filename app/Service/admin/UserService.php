@@ -29,13 +29,15 @@ class UserService implements ServiceInterface{
         return $this->userRepository->getOne($id);
     }
 
-    public function paginate()
+    public function paginate($num)
     {   
-        return $this->userRepository->paginate();
+        return $this->userRepository->paginate($num);
     }
 
     public function create(){
-
+        $user = auth()->user();
+        $role = $user->roles;
+        $permissions = empty($user->permissions) ? $role->permissions : $user->permissions;
     }
 
     public function store($data){

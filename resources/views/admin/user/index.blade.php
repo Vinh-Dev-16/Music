@@ -6,7 +6,7 @@
 @section('breadcrumbs')
     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white"
-                href="javascript:;">Home</a></li>
+                href="{{url('admin/dashboard')}}">Home</a></li>
         <li class="breadcrumb-item text-sm text-white active" aria-current="page">User</li>
     </ol>
     <h6 class="font-weight-bolder text-white mb-0">Trang chủ</h6>
@@ -23,7 +23,8 @@
             <tr>
               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
               <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">User</th>
-              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Role</th>
+              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role</th>
+              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Permission</th>
               <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cấp quyền</th>
             </tr>
           </thead>
@@ -45,10 +46,34 @@
                 </div>
               </td>
               <td class="align-middle text-sm">
-                <span class="badge badge-sm bg-gradient-success">Online</span>
+                @foreach ($user->roles as $role)
+                <span class="badge badge-sm bg-gradient-success">{{$role->name}}
+                </span>
+                @endforeach
+              </td>
+              <td class="align-middle text-sm">
+                @if ($user->permissions->count() > 0)
+                @foreach ($user->permissions as $permission)
+                <span class="badge badge-sm bg-gradient-success">{{$permission->name}}
+                </span>
+                @endforeach
+                @else
+                @foreach ($user->roles as $role)
+                 @if($role->permissions->count() > 0)
+                    @foreach ($role->permissions as $permission)
+                    <span class="badge badge-sm bg-gradient-success">{{$permission->name}}
+                    </span>
+                    @endforeach
+                 @else
+                  <span class="badge badge-sm bg-gradient-success">Không có
+                  </span>
+                 @endif
+                @endforeach
+                @endif
               </td>
               <td class="align-middle text-center">
                 <span class="text-secondary text-xs"><a href="">Phân role</a></span>
+                <br>
                 <span class="text-secondary text-xs"><a href="">Phân quyền</a></span>
               </td>
             </tr>         
@@ -58,5 +83,5 @@
       </div>
     </div>
   </div>
-  {{$users->links()}}
+  {{$users->links('vendor.pagination.bootstrap-4')}}
 @endsection

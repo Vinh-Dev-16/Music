@@ -1,12 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/apple-icon.png')}}">
-    <link rel="icon" type="image/png" href="{{asset('favicon.ico')}}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
     <title>
         @section('title')
         @show
@@ -14,34 +14,61 @@
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
-    <link href="{{asset('css/nucleo-icons.css')}}" rel="stylesheet" />
-    <link href="{{asset('css/nucleo-svg.css')}}" rel="stylesheet" />
+    <link href="{{ asset('css/nucleo-icons.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <link href="{{asset('css/nucleo-svg.css')}}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+
     <!-- CSS Files -->
-    <link id="pagestyle" href="{{asset('css/argon-dashboard.css')}}" rel="stylesheet" />
+    <link id="pagestyle" href="{{ asset('css/argon-dashboard.css') }}" rel="stylesheet" />
 </head>
 
-<body class="g-sidenav-show   bg-gray-100">
+<body class="g-sidenav-show bg-gray-100 " id="body-show">
+    @if (Session::has('success'))
+        <ul class="notification">
+            <li class="success toasts">
+                <div class="column">
+                    <i class="fa fa-check"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                <i class="fa fa-xmark"></i>
+            </li>
+        </ul>
+    @elseif (Session::has('error'))
+        <ul class="notification">
+            <li class="error toasts">
+                <div class="column">
+                    <i class="fa fa-xmark"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+                <i class="fa fa-xmark"></i>
+            </li>
+        </ul>
+    @endif
     <div class="min-height-300 bg-primary position-absolute w-100"></div>
     <aside
-        class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
+        class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 ps bg-white"
         id="sidenav-main">
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
                 aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html "
                 target="_blank">
-                <img src="{{asset('img/logo-ct-dark.png')}}" class="navbar-brand-img h-100" alt="main_logo">
+                <img src="{{ asset('img/logo-ct-dark.png') }}" class="navbar-brand-img h-100" alt="main_logo">
                 <span class="ms-1 font-weight-bold">Music</span>
             </a>
         </div>
         <hr class="horizontal dark mt-0">
-        <div class="w-auto " id="sidenav-collapse-main">
-            <ul class="navbar-nav">
+        <div class="w-auto sidebar" id="sidenav-collapse-main">
+            <ul class="navbar-nav" id="nav_accordion">
                 <li class="nav-item">
-                    <a class="nav-link active" href="./pages/dashboard.html">
+                    <a class="nav-link active" href="{{ url('admin/dashboard') }}">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
@@ -49,14 +76,19 @@
                         <span class="nav-link-text ms-1">Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="./pages/tables.html">
+                <li class="nav-item has-submenu">
+                    <a class="nav-link" href="#">
                         <div
                             class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
+                            <i class="ni ni-single-02 text-primary text-sm opacity-10"></i>
                         </div>
-                        <span class="nav-link-text ms-1">Tables</span>
+                        <span class="nav-link-text ms-1 active">User</span>
                     </a>
+                    <ul class="submenu collapse">
+                        <li><a class="nav-link" href="{{ url('admin/user/index') }}">Trang User </a></li>
+                        <li><a class="nav-link" href="{{ url('admin/role/index') }}">Role </a></li>
+                        <li><a class="nav-link" href="{{ url('admin/permission/index') }}">Permission</a> </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="./pages/billing.html">
@@ -98,22 +130,17 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="{{url('/register')}}">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="ni ni-single-copy-04 text-warning text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">Sign In</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " href="{{url('/login')}}">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="ni ni-collection text-info text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">Sign Up</span>
-                    </a>
+                    <form role="form" style="margin-left: 20px" action="{{ url('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            style="outline: none; border: none; background-color: transparent;display: flex;">
+                            <div
+                                class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="ni ni-single-copy-04 text-warning text-sm opacity-10"></i>
+                            </div>
+                            <span class="nav-link-text ms-1" style="font-size:14px; margin-top:4px;">Log Out</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -139,7 +166,7 @@
                         <li class="nav-item d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
                                 <i class="fa fa-user me-sm-1"></i>
-                                <span class="d-sm-inline d-none">Sign In</span>
+                                <span class="d-sm-inline d-none">{{ Auth::user()->name }}</span>
                             </a>
                         </li>
                         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -368,16 +395,16 @@
                                     document.write(new Date().getFullYear())
                                 </script>,
                                 made with <i class="fa fa-heart"></i> by
-                                <a href="https://www.creative-tim.com" class="font-weight-bold"
-                                    target="_blank">Creative Tim</a>
+                                <a href="https://www.facebook.com/vinh.dev.16/" class="font-weight-bold"
+                                    target="_blank">Xuan Vinh</a>
                                 for a better web.
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <ul class="nav nav-footer justify-content-center justify-content-lg-end">
                                 <li class="nav-item">
-                                    <a href="https://www.creative-tim.com" class="nav-link text-muted"
-                                        target="_blank">Creative Tim</a>
+                                    <a href="https://www.facebook.com/vinh.dev.16/" class="nav-link text-muted"
+                                        target="_blank">Xuan Vinh</a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted"
@@ -397,9 +424,15 @@
                 </div>
             </footer>
         </div>
+        <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+            <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps__rail-y" style="top: 0px; right: 0px;">
+            <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+        </div>
     </main>
-    <div class="fixed-plugin">
-        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+    <div class="fixed-plugin ps" id="show-setting">
+        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2" id="setting">
             <i class="fa fa-cog py-2"> </i>
         </a>
         <div class="card shadow-lg">
@@ -410,7 +443,7 @@
                 </div>
                 <div class="float-end mt-4">
                     <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                        <i class="fa fa-close"></i>
+                        <i class="fa fa-close" id="close-setting"></i>
                     </button>
                 </div>
                 <!-- End Toggle Button -->
@@ -488,17 +521,104 @@
         </div>
     </div>
     <!--   Core JS Files   -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('js/core/popper.min.js') }}"></script>
+    <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/smooth-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/chartjs.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.sidebar .nav-link').forEach(function(element) {
 
-    <script src="{{asset('js/core/popper.min.js')}}"></script>
-    <script src="{{asset('js/core/bootstrap.min.js')}}"></script>
-    <script src="{{asset('js/plugins/perfect-scrollbar.min.js')}}"></script>
-    <script src="{{asset('js/plugins/smooth-scrollbar.min.js')}}"></script>
-    <script src="{{asset('js/plugins/chartjs.min.js')}}"></script>
-   
+                element.addEventListener('click', function(e) {
+
+                    let nextEl = element.nextElementSibling;
+                    let parentEl = element.parentElement;
+
+                    if (nextEl) {
+                        e.preventDefault();
+                        let mycollapse = new bootstrap.Collapse(nextEl);
+
+                        if (nextEl.classList.contains('show')) {
+                            mycollapse.hide();
+                        } else {
+                            mycollapse.show();
+                            // find other submenus with class=show
+                            var opened_submenu = parentEl.parentElement.querySelector(
+                                '.submenu.show');
+                            // if it exists, then close all of them
+                            if (opened_submenu) {
+                                new bootstrap.Collapse(opened_submenu);
+                            }
+                        }
+                    }
+                }); // addEventListener
+            }) // forEach
+        });
+
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+            var options = {
+                damping: '0.5'
+            }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+
+        const setting = document.querySelector('#setting');
+        const showSetting = document.querySelector('#show-setting');
+        const closeSetting = document.querySelector('#close-setting');
+        setting.addEventListener('click', () => {
+            if (!showSetting.classList.contains('show')) {
+                showSetting.classList.add('show');
+            }
+        });
+        closeSetting.addEventListener('click', () => {
+            showSetting.classList.remove('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.show')) {
+                showSetting.classList.remove('show');
+            }
+        });
+
+        const bodyShow = document.querySelector('#body-show');
+        iconNavbarSidenav.addEventListener('click', (e) => {
+                bodyShow.classList.toggle('g-sidenav-pinned');
+        });
+    </script>
+    @if (Session::has('success') || Session::has('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+
+                const notifications = document.querySelector('.notification');
+                const toast = document.querySelector('.toasts');
+                const timer = 3000;
+
+
+                function removeToast(toast) {
+                    toast.classList.add("hide");
+                    if (toast.timeoutId) clearTimeout(toast.timeoutId);
+                    setTimeout(() => toast.remove(), 400);
+                }
+                setTime();
+
+                function setTime() {
+                    setTimeout(() => removeToast(toast), 3000)
+                }
+            });
+        </script>
+    @endif
+    @section('javascript')
+    @show
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="{{asset('js/argon-dashboard.min.js')}}"></script>
+    <script src="{{ asset('js/argon-dashboard.min.js?v=2.0.4') }}"></script>
+
 </body>
 
 </html>
